@@ -1,19 +1,20 @@
-# atom-terminal
+# atom-tig
 
-Open terminal on current file's directory with `ctrl-shift-t`.
+Open Tig in the project's root directory with `alt-shift-t`.
 
-Open a terminal in the project's root directory with `alt-shift-t`.
+Open Tig on current file with `ctrl-shift-t`.
 
-Keybindings: `ctrl-shift-t`, `alt-shift-t`
+Open Tig blame on current file with `ctrl-shift-b`.
 
-Install: `apm install atom-terminal`
+Keybindings: `alt-shift-t`, `ctrl-shift-t`, `ctrl-shift-b`
+
+Install: `apm install atom-tig`
 
 Config:
 ```coffeescript
-"atom-terminal":
+"atom-tig":
     # only necessary if standard config doesn't find terminal app
     app: "/path/to/your/favorite/terminal"
-    args: "--useThisOptionWhenLaunchingTerminal"
+    tig: "/path/to/tig"
+    args: "--useThisOptionWhenLaunchingTig"
 ```
-
-![atom-terminal](https://raw.github.com/karan/atom-terminal/master/terminal.gif)

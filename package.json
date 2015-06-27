@@ -1,15 +1,16 @@
 {
-  "name": "atom-terminal",
-  "main": "./lib/atom-terminal",
-  "version": "0.8.1",
-  "description": "Open terminal in the current file's directory.",
+  "name": "atom-tig",
+  "main": "./lib/atom-tig",
+  "version": "0.1.0",
+  "description": "Open Tig or Tig blame on the current file.",
   "activationCommands": {
     "atom-workspace": [
-      "atom-terminal:open",
-      "atom-terminal:open-project-root"
+      "atom-tig:open",
+      "atom-tig:blame",
+      "atom-tig:open-project-root"
     ]
   },
-  "repository": "https://github.com/karan/atom-terminal",
+  "repository": "https://github.com/nicolasmartinelli/atom-tig",
   "license": "MIT",
   "engines": {
     "atom": ">0.50.0"

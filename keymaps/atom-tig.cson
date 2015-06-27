@@ -8,5 +8,6 @@
 # For more detailed documentation see
 # https://atom.io/docs/latest/advanced/keymaps
 'atom-workspace':
-    'ctrl-shift-t': 'atom-terminal:open'
-    'alt-shift-t': 'atom-terminal:open-project-root'
+    'ctrl-shift-t': 'atom-tig:open'
+    'ctrl-shift-b': 'atom-tig:blame'
+    'alt-shift-t': 'atom-tig:open-project-root'

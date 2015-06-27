@@ -3,20 +3,35 @@ path = require('path')
 platform = require('os').platform
 
 ###
-   Opens a terminal in the given directory, as specefied by the config
+   Opens tig in the given directory, as specefied by the config
 ###
-open_terminal = (dirpath) ->
+open_tig = (dirpath, filepath, blame) ->
   # Figure out the app and the arguments
-  app = atom.config.get('atom-terminal.app')
-  args = atom.config.get('atom-terminal.args')
+  app = atom.config.get('atom-tig.app')
+  tig = atom.config.get('atom-tig.tig')
+  args = atom.config.get('atom-tig.args')
 
   # get options
-  setWorkingDirectory = atom.config.get('atom-terminal.setWorkingDirectory')
-  surpressDirArg = atom.config.get('atom-terminal.surpressDirectoryArgument')
-  runDirectly = atom.config.get('atom-terminal.MacWinRunDirectly')
+  setWorkingDirectory = atom.config.get('atom-tig.setWorkingDirectory')
+  surpressDirArg = atom.config.get('atom-tig.surpressDirectoryArgument')
+  runDirectly = atom.config.get('atom-tig.MacWinRunDirectly')
 
   # Start assembling the command line
-  cmdline = "\"#{app}\" #{args}"
+  cmdline = "\"#{app}\" -x sh -c \'#{tig} "
+
+  # Add blame if requested
+  if blame
+      cmdline += " blame "
+
+  # Add arguments
+  cmdline += " #{args} "
+
+  # Add file
+  if filepath
+      cmdline += "\"" + filepath + "\""
+
+  # Close the command line
+  cmdline += "\'"
 
   # If we do not supress the directory argument, add the directory as an argument
   if !surpressDirArg
@@ -31,7 +46,7 @@ open_terminal = (dirpath) ->
     cmdline = "start \"\" " + cmdline
 
   # log the command so we have context if it fails
-  console.log("atom-terminal executing: ", cmdline)
+  console.log("atom-tig executing: ", cmdline)
 
   # Set the working directory if configured
   if setWorkingDirectory
@@ -42,16 +57,23 @@ open_terminal = (dirpath) ->
 
 module.exports =
     activate: ->
-        atom.commands.add "atom-workspace", "atom-terminal:open", => @open()
-        atom.commands.add "atom-workspace", "atom-terminal:open-project-root", => @openroot()
+        atom.commands.add "atom-workspace", "atom-tig:open", => @open()
+        atom.commands.add "atom-workspace", "atom-tig:blame", => @blame()
+        atom.commands.add "atom-workspace", "atom-tig:open-project-root", => @openroot()
     open: ->
         editor = atom.workspace.getActivePaneItem()
         file = editor?.buffer?.file
         filepath = file?.path
         if filepath
-            open_terminal path.dirname(filepath)
+            open_tig(path.dirname(filepath), filepath, false)
+    blame: ->
+        editor = atom.workspace.getActivePaneItem()
+        file = editor?.buffer?.file
+        filepath = file?.path
+        if filepath
+            open_tig(path.dirname(filepath), filepath, true)
     openroot: ->
-        open_terminal pathname for pathname in atom.project.getPaths()
+        open_tig(atom.project.getPaths()[0], false, false)
 
 # Set per-platform defaults
 if platform() == 'darwin'
@@ -60,6 +82,9 @@ if platform() == 'darwin'
     app:
       type: 'string'
       default: 'Terminal.app'
+    tig:
+      type: 'string'
+      default: 'tig'
     args:
       type: 'string'
       default: ''
@@ -78,6 +103,9 @@ else if platform() == 'win32'
       app:
         type: 'string'
         default: 'C:\\Windows\\System32\\cmd.exe'
+      tig:
+        type: 'string'
+        default: 'tig'
       args:
         type: 'string'
         default: ''
@@ -96,12 +124,15 @@ else
       app:
         type: 'string'
         default: '/usr/bin/x-terminal-emulator'
+      tig:
+        type: 'string'
+        default: 'tig'
       args:
         type: 'string'
         default: ''
       surpressDirectoryArgument:
         type: 'boolean'
-        default: false
+        default: true
       setWorkingDirectory:
         type: 'boolean'
         default: true
