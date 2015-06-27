@@ -12,30 +12,32 @@ open_tig = (dirpath, filepath, blame) ->
   args = atom.config.get('atom-tig.args')
 
   # get options
-  setWorkingDirectory = atom.config.get('atom-tig.setWorkingDirectory')
-  surpressDirArg = atom.config.get('atom-tig.surpressDirectoryArgument')
+  openMaximize = atom.config.get('atom-tig.openMaximize')
   runDirectly = atom.config.get('atom-tig.MacWinRunDirectly')
 
   # Start assembling the command line
-  cmdline = "\"#{app}\" -x sh -c \'#{tig} "
+  cmdline = "\"#{app}\" "
+
+  # Add maximize if requested
+  if openMaximize
+    cmdline += " -m "
+
+  # Add Tig
+  cmdline += " -x sh -c \'#{tig} "
 
   # Add blame if requested
   if blame
-      cmdline += " blame "
+    cmdline += " blame "
 
   # Add arguments
   cmdline += " #{args} "
 
   # Add file
   if filepath
-      cmdline += "\"" + filepath + "\""
+    cmdline += "\"" + filepath + "\""
 
   # Close the command line
   cmdline += "\'"
-
-  # If we do not supress the directory argument, add the directory as an argument
-  if !surpressDirArg
-      cmdline  += " \"#{dirpath}\""
 
   # For mac, we prepend open -a unless we run it directly
   if platform() == "darwin" && !runDirectly
@@ -48,11 +50,8 @@ open_tig = (dirpath, filepath, blame) ->
   # log the command so we have context if it fails
   console.log("atom-tig executing: ", cmdline)
 
-  # Set the working directory if configured
-  if setWorkingDirectory
-    exec cmdline, cwd: dirpath if dirpath?
-  else
-    exec cmdline if dirpath?
+  # Set the working directory
+  exec cmdline, cwd: dirpath if dirpath?
 
 
 module.exports =
@@ -88,12 +87,9 @@ if platform() == 'darwin'
     args:
       type: 'string'
       default: ''
-    surpressDirectoryArgument:
-      type: 'boolean'
-      default: false
-    setWorkingDirectory:
-      type: 'boolean'
-      default: true
+    openMaximize:
+        type: 'boolean'
+        default: false
     MacWinRunDirectly:
       type: 'boolean'
       default: false
@@ -109,12 +105,9 @@ else if platform() == 'win32'
       args:
         type: 'string'
         default: ''
-      surpressDirectoryArgument:
+      openMaximize:
         type: 'boolean'
         default: false
-      setWorkingDirectory:
-        type: 'boolean'
-        default: true
       MacWinRunDirectly:
         type: 'boolean'
         default: false
@@ -130,10 +123,7 @@ else
       args:
         type: 'string'
         default: ''
-      surpressDirectoryArgument:
-        type: 'boolean'
-        default: true
-      setWorkingDirectory:
+      openMaximize:
         type: 'boolean'
         default: true
       MacWinRunDirectly:
