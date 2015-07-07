@@ -5,7 +5,7 @@ platform = require('os').platform
 ###
    Opens tig in the given directory, as specefied by the config
 ###
-open_tig = (dirpath, filepath, blame) ->
+open_tig = (filepath, blame) ->
   # Figure out the app and the arguments
   app = atom.config.get('atom-tig.app')
   tig = atom.config.get('atom-tig.tig')
@@ -51,7 +51,7 @@ open_tig = (dirpath, filepath, blame) ->
   console.log("atom-tig executing: ", cmdline)
 
   # Set the working directory
-  exec cmdline, cwd: dirpath if dirpath?
+  exec cmdline, cwd: atom.project.getPaths()[0] if atom.project.getPaths()[0]?
 
 
 module.exports =
@@ -64,15 +64,15 @@ module.exports =
         file = editor?.buffer?.file
         filepath = file?.path
         if filepath
-            open_tig(path.dirname(filepath), filepath, false)
+            open_tig(filepath, false)
     blame: ->
         editor = atom.workspace.getActivePaneItem()
         file = editor?.buffer?.file
         filepath = file?.path
         if filepath
-            open_tig(path.dirname(filepath), filepath, true)
+            open_tig(filepath, true)
     openroot: ->
-        open_tig(atom.project.getPaths()[0], false, false)
+        open_tig(false, false)
 
 # Set per-platform defaults
 if platform() == 'darwin'
