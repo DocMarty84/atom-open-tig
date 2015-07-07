@@ -54,6 +54,13 @@ open_tig = (filepath, blame) ->
   if filepath
     cmdline += "\"" + filepath + "\""
 
+  # Add cursor position
+  if blame
+    editor = atom.workspace.getActivePaneItem()
+    row = (editor?.getCursorBufferPosition()?.row + 1).toString()
+    if row
+      cmdline += " +" + row
+
   # Close the command line
   cmdline += "\'"
 
