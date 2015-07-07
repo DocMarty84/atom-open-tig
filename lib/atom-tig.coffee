@@ -1,10 +1,28 @@
 exec = require('child_process').exec
 path = require('path')
 platform = require('os').platform
+fs = require('fs')
 
 ###
    Opens tig in the given directory, as specefied by the config
 ###
+
+git_directory = (filepath) ->
+  if not filepath || (atom.project.getPaths()[0] && fs.existsSync(path.join(atom.project.getPaths()[0], ".git")))
+    return atom.project.getPaths()[0]
+
+  filepath_info = path.parse(filepath)
+  dirpath = filepath_info.dir
+  dirpath_split = dirpath.split(path.sep)
+
+  while filepath_info.root != dirpath
+    if fs.existsSync(path.join(dirpath, ".git"))
+      return dirpath
+    dirpath_split.pop()
+    dirpath = dirpath_split.join(path.sep)
+
+  return atom.project.getPaths()[0]
+
 open_tig = (filepath, blame) ->
   # Figure out the app and the arguments
   app = atom.config.get('atom-tig.app')
@@ -50,8 +68,10 @@ open_tig = (filepath, blame) ->
   # log the command so we have context if it fails
   console.log("atom-tig executing: ", cmdline)
 
+  git_dir = git_directory filepath
+
   # Set the working directory
-  exec cmdline, cwd: atom.project.getPaths()[0] if atom.project.getPaths()[0]?
+  exec cmdline, cwd: git_dir if git_dir?
 
 
 module.exports =
