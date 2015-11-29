@@ -1,7 +1,7 @@
 {
   "name": "atom-tig",
   "main": "./lib/atom-tig",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Open Tig or Tig blame on the current file.",
   "activationCommands": {
     "atom-workspace": [
