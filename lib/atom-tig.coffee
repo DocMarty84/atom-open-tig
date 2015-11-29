@@ -8,7 +8,7 @@ fs = require('fs')
 ###
 
 git_directory = (filepath) ->
-  if not filepath || (atom.project.getPaths()[0] && fs.existsSync(path.join(atom.project.getPaths()[0], ".git")))
+  if not filepath
     return atom.project.getPaths()[0]
 
   filepath_info = path.parse(filepath)
@@ -72,10 +72,10 @@ open_tig = (filepath, blame) ->
   if platform() == "win32" && !runDirectly
     cmdline = "start \"\" " + cmdline
 
-  # log the command so we have context if it fails
-  console.log("atom-tig executing: ", cmdline)
+  git_dir = git_directory(filepath)
 
-  git_dir = git_directory filepath
+  # log the command so we have context if it fails
+  console.log("atom-tig executing: ", git_dir, cmdline)
 
   # Set the working directory
   exec cmdline, cwd: git_dir if git_dir?

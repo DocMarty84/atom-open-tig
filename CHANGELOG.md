@@ -1,3 +1,7 @@
+## 0.2.1
+
+* Safer way to get git directory
+
 ## 0.2.0
 
 * Fix use of blame
