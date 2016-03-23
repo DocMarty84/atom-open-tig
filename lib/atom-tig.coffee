@@ -24,16 +24,22 @@ git_directory = (filepath) ->
   return atom.project.getPaths()[0]
 
 open_tig = (filepath, blame) ->
-  # Figure out the app and the arguments
+  # get options
   app = atom.config.get('atom-tig.app')
   tig = atom.config.get('atom-tig.tig')
-
-  # get options
   openMaximize = atom.config.get('atom-tig.openMaximize')
   runDirectly = atom.config.get('atom-tig.MacWinRunDirectly')
+  workingDirectoryParam = atom.config.get('atom-tig.workingDirectoryParam')
+
+  # get git directory
+  git_dir = git_directory(filepath)
 
   # Start assembling the command line
   cmdline = "\"#{app}\""
+
+  # Set the working directory
+  if workingDirectoryParam && git_dir
+    cmdline += " " + workingDirectoryParam + " " + git_dir
 
   # Add maximize if requested
   if openMaximize
@@ -68,13 +74,12 @@ open_tig = (filepath, blame) ->
   if platform() == "win32" && !runDirectly
     cmdline = "start \"\" " + cmdline
 
-  git_dir = git_directory(filepath)
-
-  # log the command so we have context if it fails
-  console.log("atom-tig executing: ", git_dir, cmdline)
-
-  # Set the working directory
-  exec cmdline, cwd: git_dir if git_dir?
+  if workingDirectoryParam
+    console.log("atom-tig executing: ", cmdline)
+    exec cmdline
+  else
+    console.log("atom-tig executing: ", git_dir, cmdline)
+    exec cmdline, cwd: git_dir if git_dir?
 
 
 module.exports =
@@ -113,6 +118,9 @@ if platform() == 'darwin'
     MacWinRunDirectly:
       type: 'boolean'
       default: false
+    workingDirectoryParam:
+      type: 'string'
+      default: ''
 else if platform() == 'win32'
   # Defaults for windows, use cmd.exe as default
   module.exports.config =
@@ -128,6 +136,9 @@ else if platform() == 'win32'
       MacWinRunDirectly:
         type: 'boolean'
         default: false
+      workingDirectoryParam:
+        type: 'string'
+        default: ''
 else
   # Defaults for all other systems (linux I assume), use xterm
   module.exports.config =
@@ -143,3 +154,6 @@ else
       MacWinRunDirectly:
         type: 'boolean'
         default: false
+      workingDirectoryParam:
+        type: 'string'
+        default: ''
