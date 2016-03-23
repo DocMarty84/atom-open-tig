@@ -34,25 +34,25 @@ open_tig = (filepath, blame) ->
   runDirectly = atom.config.get('atom-tig.MacWinRunDirectly')
 
   # Start assembling the command line
-  cmdline = "\"#{app}\" "
+  cmdline = "\"#{app}\""
 
   # Add maximize if requested
   if openMaximize
-    cmdline += " -m "
+    cmdline += " -m"
 
   # Add Tig
-  cmdline += " -x sh -c \'#{tig} "
+  cmdline += " -e \'#{tig}"
 
   # Add blame if requested
   if blame
-    cmdline += " blame "
+    cmdline += " blame"
 
   # Add arguments
-  cmdline += " #{args} "
+  cmdline += " #{args}"
 
   # Add file
   if filepath
-    cmdline += "\"" + filepath + "\""
+    cmdline += " \"" + filepath + "\""
 
   # Add cursor position
   if blame
