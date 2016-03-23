@@ -27,7 +27,6 @@ open_tig = (filepath, blame) ->
   # Figure out the app and the arguments
   app = atom.config.get('atom-tig.app')
   tig = atom.config.get('atom-tig.tig')
-  args = atom.config.get('atom-tig.args')
 
   # get options
   openMaximize = atom.config.get('atom-tig.openMaximize')
@@ -46,9 +45,6 @@ open_tig = (filepath, blame) ->
   # Add blame if requested
   if blame
     cmdline += " blame"
-
-  # Add arguments
-  cmdline += " #{args}"
 
   # Add file
   if filepath
@@ -111,9 +107,6 @@ if platform() == 'darwin'
     tig:
       type: 'string'
       default: 'tig'
-    args:
-      type: 'string'
-      default: ''
     openMaximize:
         type: 'boolean'
         default: false
@@ -129,9 +122,6 @@ else if platform() == 'win32'
       tig:
         type: 'string'
         default: 'tig'
-      args:
-        type: 'string'
-        default: ''
       openMaximize:
         type: 'boolean'
         default: false
@@ -147,9 +137,6 @@ else
       tig:
         type: 'string'
         default: 'tig'
-      args:
-        type: 'string'
-        default: ''
       openMaximize:
         type: 'boolean'
         default: true
