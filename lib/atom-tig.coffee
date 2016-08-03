@@ -37,12 +37,20 @@ open_tig = (filepath, blame) ->
   #### Start assembling the command line ####
   cmdline = "\"#{app}\""
 
+  # For mac, we need to use osascript to force the app to run a command
+  if platform() == "darwin" && !runDirectly
+    cmdline = "osascript -e 'tell application " + cmdline + " to do script \"cd " + git_dir + " && "
+
+  # For windows, we prepend start unless we run it directly.
+  if platform() == "win32" && !runDirectly
+    cmdline = "start \"\" " + cmdline
+
   # Set the working directory
   if workingDirectoryParam && git_dir
     cmdline += " " + workingDirectoryParam + " " + git_dir
 
   # Add maximize if requested
-  if openMaximize
+  if openMaximize && platform() != "darwin"
     cmdline += " -m"
 
   #### Build tig part of the command line ####
@@ -54,7 +62,10 @@ open_tig = (filepath, blame) ->
 
   # Add file
   if filepath
-    tig_cmdline += " \"" + filepath + "\""
+    if platform() == "darwin" && !runDirectly
+      tig_cmdline += " \\\"" + filepath + "\\\""
+    else
+      tig_cmdline += " \"" + filepath + "\""
 
   # Add cursor position
   if blame
@@ -64,16 +75,18 @@ open_tig = (filepath, blame) ->
       tig_cmdline += " +" + row
 
   # Add tig part of the command line
-  cmdline += " -e " + tig_cmdline + "\'"
+  if platform() != "darwin" || runDirectly
+    cmdline += " -e \'" + tig_cmdline + "\'"
+  cmdline += tig_cmdline
 
   #### Close and run the command line ####
-  # For mac, we prepend open -a unless we run it directly
+  # Close the script command on mac
   if platform() == "darwin" && !runDirectly
-    cmdline = "open -a " + cmdline
+    cmdline += "\" in window 1'"
 
-  # for windows, we prepend start unless we run it directly.
-  if platform() == "win32" && !runDirectly
-    cmdline = "start \"\" " + cmdline
+  # Add maximize on mac if requested
+  if openMaximize && platform() == "darwin" && !runDirectly
+    cmdline += " && osascript -e 'tell application \"Finder\"' -e 'set desktopSize to bounds of window of desktop' -e 'end tell' -e 'tell application \"#{app}\"' -e 'set bounds of window 1 to desktopSize' -e 'activate' -e 'end tell'"
 
   if workingDirectoryParam
     console.log("atom-tig executing: ", cmdline)
