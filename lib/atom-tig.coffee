@@ -34,7 +34,7 @@ open_tig = (filepath, blame) ->
   # get git directory
   git_dir = git_directory(filepath)
 
-  # Start assembling the command line
+  #### Start assembling the command line ####
   cmdline = "\"#{app}\""
 
   # Set the working directory
@@ -45,27 +45,28 @@ open_tig = (filepath, blame) ->
   if openMaximize
     cmdline += " -m"
 
-  # Add Tig
-  cmdline += " -e \'#{tig}"
+  #### Build tig part of the command line ####
+  tig_cmdline = "#{tig}"
 
   # Add blame if requested
   if blame
-    cmdline += " blame"
+    tig_cmdline += " blame"
 
   # Add file
   if filepath
-    cmdline += " \"" + filepath + "\""
+    tig_cmdline += " \"" + filepath + "\""
 
   # Add cursor position
   if blame
     editor = atom.workspace.getActivePaneItem()
     row = (editor?.getCursorBufferPosition()?.row + 1).toString()
     if row
-      cmdline += " +" + row
+      tig_cmdline += " +" + row
 
-  # Close the command line
-  cmdline += "\'"
+  # Add tig part of the command line
+  cmdline += " -e " + tig_cmdline + "\'"
 
+  #### Close and run the command line ####
   # For mac, we prepend open -a unless we run it directly
   if platform() == "darwin" && !runDirectly
     cmdline = "open -a " + cmdline
