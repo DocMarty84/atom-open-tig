@@ -7,6 +7,11 @@ fs = require('fs')
    Opens tig in the given directory, as specefied by the config
 ###
 
+get_filepath = () ->
+  editor = atom.workspace.getActivePaneItem()
+  file = editor?.buffer?.file
+  return file?.path
+
 git_directory = (filepath) ->
   if not filepath
     return atom.project.getPaths()[0]
@@ -23,7 +28,7 @@ git_directory = (filepath) ->
 
   return atom.project.getPaths()[0]
 
-open_tig = (filepath, blame) ->
+open_tig = (filepath, mode) ->
   # get options
   app = atom.config.get('atom-tig.app')
   tig = atom.config.get('atom-tig.tig')
@@ -57,18 +62,18 @@ open_tig = (filepath, blame) ->
   tig_cmdline = "#{tig}"
 
   # Add blame if requested
-  if blame
+  if mode == 'blame'
     tig_cmdline += " blame"
 
   # Add file
-  if filepath
+  if filepath && mode != 'root'
     if platform() == "darwin" && !runDirectly
       tig_cmdline += " \\\"" + filepath + "\\\""
     else
       tig_cmdline += " \"" + filepath + "\""
 
   # Add cursor position
-  if blame
+  if mode == 'blame'
     editor = atom.workspace.getActivePaneItem()
     row = (editor?.getCursorBufferPosition()?.row + 1).toString()
     if row
@@ -98,24 +103,20 @@ open_tig = (filepath, blame) ->
 
 
 module.exports =
-    activate: ->
-        atom.commands.add "atom-workspace", "atom-tig:open", => @open()
-        atom.commands.add "atom-workspace", "atom-tig:blame", => @blame()
-        atom.commands.add "atom-workspace", "atom-tig:open-project-root", => @openroot()
-    open: ->
-        editor = atom.workspace.getActivePaneItem()
-        file = editor?.buffer?.file
-        filepath = file?.path
-        if filepath
-            open_tig(filepath, false)
-    blame: ->
-        editor = atom.workspace.getActivePaneItem()
-        file = editor?.buffer?.file
-        filepath = file?.path
-        if filepath
-            open_tig(filepath, true)
-    openroot: ->
-        open_tig(false, false)
+  activate: ->
+    atom.commands.add "atom-workspace", "atom-tig:open", => @open()
+    atom.commands.add "atom-workspace", "atom-tig:blame", => @blame()
+    atom.commands.add "atom-workspace", "atom-tig:open-project-root", => @openroot()
+  open: ->
+    filepath = get_filepath()
+    if filepath
+      open_tig(filepath, 'file')
+  blame: ->
+    filepath = get_filepath()
+    if filepath
+      open_tig(filepath, 'blame')
+  openroot: ->
+    open_tig(get_filepath(), 'root')
 
 # Set per-platform defaults
 if platform() == 'darwin'
