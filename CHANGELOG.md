@@ -1,3 +1,17 @@
+## 0.4.0
+
+* Open tig on root folder of opened file
+* Change keybinding to open tig on file
+
+## 0.3.1
+
+* Adapt to MacOS
+
+## 0.3.0
+
+* Add option for working directory
+* Compatibility fixes
+
 ## 0.2.1
 
 * Safer way to get git directory
