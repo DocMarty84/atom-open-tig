@@ -2,13 +2,13 @@
 
 Open Tig in the project's root directory with `alt-shift-t`.
 
-Open Tig on current file with `ctrl-shift-t`.
+Open Tig on current file with `ctrl-shift-h`.
 
 Open Tig blame on current file with `ctrl-shift-b`.
 
 Based on package atom-terminal.
 
-Keybindings: `alt-shift-t`, `ctrl-shift-t`, `ctrl-shift-b`
+Keybindings: `alt-shift-t`, `ctrl-shift-h`, `ctrl-shift-b`
 
 Install: `apm install atom-tig`
 
