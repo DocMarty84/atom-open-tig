@@ -129,8 +129,8 @@ if platform() == 'darwin'
       type: 'string'
       default: 'tig'
     openMaximize:
-        type: 'boolean'
-        default: false
+      type: 'boolean'
+      default: false
     MacWinRunDirectly:
       type: 'boolean'
       default: false
@@ -140,36 +140,36 @@ if platform() == 'darwin'
 else if platform() == 'win32'
   # Defaults for windows, use cmd.exe as default
   module.exports.config =
-      app:
-        type: 'string'
-        default: 'C:\\Windows\\System32\\cmd.exe'
-      tig:
-        type: 'string'
-        default: 'tig'
-      openMaximize:
-        type: 'boolean'
-        default: false
-      MacWinRunDirectly:
-        type: 'boolean'
-        default: false
-      workingDirectoryParam:
-        type: 'string'
-        default: ''
+    app:
+      type: 'string'
+      default: 'C:\\Windows\\System32\\cmd.exe'
+    tig:
+      type: 'string'
+      default: 'tig'
+    openMaximize:
+      type: 'boolean'
+      default: false
+    MacWinRunDirectly:
+      type: 'boolean'
+      default: false
+    workingDirectoryParam:
+      type: 'string'
+      default: ''
 else
   # Defaults for all other systems (linux I assume), use xterm
   module.exports.config =
-      app:
-        type: 'string'
-        default: '/usr/bin/x-terminal-emulator'
-      tig:
-        type: 'string'
-        default: 'tig'
-      openMaximize:
-        type: 'boolean'
-        default: true
-      MacWinRunDirectly:
-        type: 'boolean'
-        default: false
-      workingDirectoryParam:
-        type: 'string'
-        default: ''
+    app:
+      type: 'string'
+      default: '/usr/bin/x-terminal-emulator'
+    tig:
+      type: 'string'
+      default: 'tig'
+    openMaximize:
+      type: 'boolean'
+      default: true
+    MacWinRunDirectly:
+      type: 'boolean'
+      default: false
+    workingDirectoryParam:
+      type: 'string'
+      default: ''
