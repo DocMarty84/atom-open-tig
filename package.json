@@ -10,7 +10,7 @@
       "atom-tig:open-project-root"
     ]
   },
-  "repository": "https://github.com/nicolasmartinelli/atom-tig",
+  "repository": "https://github.com/DocMarty84/atom-tig",
   "license": "MIT",
   "engines": {
     "atom": ">0.50.0"
