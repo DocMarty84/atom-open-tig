@@ -1,3 +1,8 @@
+## 0.5.0
+
+* Add the maximize argument in settings
+* Clean-up settings, add title, order and description
+
 ## 0.4.0
 
 * Open tig on root folder of opened file
