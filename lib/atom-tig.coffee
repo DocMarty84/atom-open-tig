@@ -122,61 +122,50 @@ module.exports =
 # Set per-platform defaults
 if platform() == 'darwin'
   # Defaults for Mac, use Terminal.app
-  module.exports.config =
-    app:
-      type: 'string'
-      default: 'Terminal.app'
-    tig:
-      type: 'string'
-      default: 'tig'
-    openMaximize:
-      type: 'boolean'
-      default: false
-    MacWinRunDirectly:
-      type: 'boolean'
-      default: false
-    workingDirectoryParam:
-      type: 'string'
-      default: ''
+  default_app = 'Terminal.app'
+  default_openMaximize = true
+  default_maximizeArg = ''
 else if platform() == 'win32'
   # Defaults for windows, use cmd.exe as default
-  module.exports.config =
-    app:
-      type: 'string'
-      default: 'C:\\Windows\\System32\\cmd.exe'
-    tig:
-      type: 'string'
-      default: 'tig'
-    openMaximize:
-      type: 'boolean'
-      default: false
-    maximizeArg:
-      type: 'string'
-      default: ''
-    MacWinRunDirectly:
-      type: 'boolean'
-      default: false
-    workingDirectoryParam:
-      type: 'string'
-      default: ''
+  default_app = 'C:\\Windows\\System32\\cmd.exe'
+  default_openMaximize = false
+  default_maximizeArg = ''
 else
   # Defaults for all other systems (linux I assume), use xterm
-  module.exports.config =
-    app:
-      type: 'string'
-      default: '/usr/bin/x-terminal-emulator'
-    tig:
-      type: 'string'
-      default: 'tig'
-    openMaximize:
-      type: 'boolean'
-      default: true
-    maximizeArg:
-      type: 'string'
-      default: '-m'
-    MacWinRunDirectly:
-      type: 'boolean'
-      default: false
-    workingDirectoryParam:
-      type: 'string'
-      default: ''
+  default_app = '/usr/bin/x-terminal-emulator'
+  default_openMaximize = true
+  default_maximizeArg = '-m'
+
+module.exports.config =
+  app:
+    type: 'string'
+    default: default_app
+    order: 10
+    title: 'Terminal Executable'
+  tig:
+    type: 'string'
+    default: 'tig'
+    order: 20
+    title: 'Tig Executable'
+  openMaximize:
+    type: 'boolean'
+    default: default_openMaximize
+    order: 30
+    title: 'Open Maximized'
+  maximizeArg:
+    type: 'string'
+    default: default_maximizeArg
+    order: 40
+    title: 'Maximized Argument'
+    description: '''For Linux: (1) terminator => -m (2) gnome-terminal => --maximize (3) konsole => --fullscreen'''
+  MacWinRunDirectly:
+    type: 'boolean'
+    default: false
+    order: 50
+    title: 'Run Directly (Win & MacOS only)'
+  workingDirectoryParam:
+    type: 'string'
+    default: ''
+    order: 60
+    title: 'Working Directory'
+    description: '''This might be required on some systems.'''
