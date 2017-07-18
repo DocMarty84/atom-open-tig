@@ -33,6 +33,7 @@ open_tig = (filepath, mode) ->
   app = atom.config.get('atom-tig.app')
   tig = atom.config.get('atom-tig.tig')
   openMaximize = atom.config.get('atom-tig.openMaximize')
+  maximizeArg = atom.config.get('atom-tig.maximizeArg')
   runDirectly = atom.config.get('atom-tig.MacWinRunDirectly')
   workingDirectoryParam = atom.config.get('atom-tig.workingDirectoryParam')
 
@@ -56,7 +57,7 @@ open_tig = (filepath, mode) ->
 
   # Add maximize if requested
   if openMaximize && platform() != "darwin"
-    cmdline += " -m"
+    cmdline += " " + maximizeArg
 
   #### Build tig part of the command line ####
   tig_cmdline = "#{tig}"
@@ -149,6 +150,9 @@ else if platform() == 'win32'
     openMaximize:
       type: 'boolean'
       default: false
+    maximizeArg:
+      type: 'string'
+      default: ''
     MacWinRunDirectly:
       type: 'boolean'
       default: false
@@ -167,6 +171,9 @@ else
     openMaximize:
       type: 'boolean'
       default: true
+    maximizeArg:
+      type: 'string'
+      default: '-m'
     MacWinRunDirectly:
       type: 'boolean'
       default: false
