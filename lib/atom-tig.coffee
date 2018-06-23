@@ -30,12 +30,12 @@ git_directory = (filepath) ->
 
 open_tig = (filepath, mode) ->
   # get options
-  app = atom.config.get('atom-tig.app')
-  tig = atom.config.get('atom-tig.tig')
-  openMaximize = atom.config.get('atom-tig.openMaximize')
-  maximizeArg = atom.config.get('atom-tig.maximizeArg')
-  runDirectly = atom.config.get('atom-tig.MacWinRunDirectly')
-  workingDirectoryParam = atom.config.get('atom-tig.workingDirectoryParam')
+  app = atom.config.get('open-tig.app')
+  tig = atom.config.get('open-tig.tig')
+  openMaximize = atom.config.get('open-tig.openMaximize')
+  maximizeArg = atom.config.get('open-tig.maximizeArg')
+  runDirectly = atom.config.get('open-tig.MacWinRunDirectly')
+  workingDirectoryParam = atom.config.get('open-tig.workingDirectoryParam')
 
   # get git directory
   git_dir = git_directory(filepath)
@@ -96,18 +96,18 @@ open_tig = (filepath, mode) ->
     cmdline += " && osascript -e 'tell application \"Finder\"' -e 'set desktopSize to bounds of window of desktop' -e 'end tell' -e 'tell application \"#{app}\"' -e 'set bounds of window 1 to desktopSize' -e 'activate' -e 'end tell'"
 
   if workingDirectoryParam
-    console.log("atom-tig executing: ", cmdline)
+    console.log("open-tig executing: ", cmdline)
     exec cmdline
   else
-    console.log("atom-tig executing: ", git_dir, cmdline)
+    console.log("open-tig executing: ", git_dir, cmdline)
     exec cmdline, cwd: git_dir if git_dir?
 
 
 module.exports =
   activate: ->
-    atom.commands.add "atom-workspace", "atom-tig:open", => @open()
-    atom.commands.add "atom-workspace", "atom-tig:blame", => @blame()
-    atom.commands.add "atom-workspace", "atom-tig:open-project-root", => @openroot()
+    atom.commands.add "atom-workspace", "open-tig:open", => @open()
+    atom.commands.add "atom-workspace", "open-tig:blame", => @blame()
+    atom.commands.add "atom-workspace", "open-tig:open-project-root", => @openroot()
   open: ->
     filepath = get_filepath()
     if filepath

@@ -1,16 +1,16 @@
 {
   "name": "atom-tig",
-  "main": "./lib/atom-tig",
+  "main": "./lib/open-tig",
   "version": "0.5.0",
   "description": "Open Tig or Tig blame on the current file.",
   "activationCommands": {
     "atom-workspace": [
-      "atom-tig:open",
-      "atom-tig:blame",
-      "atom-tig:open-project-root"
+      "open-tig:open",
+      "open-tig:blame",
+      "open-tig:open-project-root"
     ]
   },
-  "repository": "https://github.com/DocMarty84/atom-tig",
+  "repository": "https://github.com/DocMarty84/atom-open-tig",
   "license": "MIT",
   "engines": {
     "atom": ">0.50.0"

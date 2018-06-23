@@ -1,2 +1,2 @@
 'context-menu':
-  '.platform-win32 .tree-view': [{label: 'Open Tig at Root', command: 'atom-tig:open-project-root'}]
+  '.platform-win32 .tree-view': [{label: 'Open Tig at Root', command: 'open-tig:open-project-root'}]

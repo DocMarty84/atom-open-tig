@@ -1,3 +1,7 @@
+## 0.5.1
+
+* Rename extension to 'open-tig'
+
 ## 0.5.0
 
 * Add the maximize argument in settings
