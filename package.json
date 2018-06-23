@@ -1,5 +1,5 @@
 {
-  "name": "atom-tig",
+  "name": "open-tig",
   "main": "./lib/open-tig",
   "version": "0.5.0",
   "description": "Open Tig or Tig blame on the current file.",
